@@ -7,6 +7,7 @@ import           Text.PDDL.Location ( Located(..), SrcLoc(NoLoc) )
 import qualified Text.PDDL.PP as PP
 import           Text.PDDL.SExp ( SExp(..), ParseError(..) )
 import           Text.PDDL.Types
+import qualified Data.Text as T
 
 import           Control.Applicative ( Applicative(..), Alternative(..) )
 import           MonadLib
@@ -50,7 +51,7 @@ parsePDDL sexp = PDDLDomain `fmap` parseDomain sexp
 
 isDefine :: Parse ()
 isDefine (SLoc loc)       = withLoc loc isDefine
-isDefine (SName "define") = return ()
+isDefine (SName d) | T.unpack d == "define" = return ()
 isDefine _                = parseError (PP.text "expected `define`")
 
 -- Domain Definition -----------------------------------------------------------
